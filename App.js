@@ -12,6 +12,7 @@ import LottieView from "lottie-react-native";
 import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 let timeId;
+let alertPresent = false;
 
 const App = () => {
   const appState = useRef(AppState.currentState);
@@ -58,12 +59,16 @@ const App = () => {
       if (timeId) {
         clearInterval(timeId);
       }
-      Alert.alert(
-        "已自動停止計時",
-        "\n你剛才好像分心了哦，再堅持久一點，你可以的！！",
-        [{ text: "沒問題！" }]
-      );
-
+      if (!alertPresent) {
+        alertPresent = true;
+        Alert.alert(
+          "已自動停止計時",
+          "\n你剛才好像分心了哦，再堅持久一點，你可以的！！",
+          [
+            { text: "沒問題！", onPress: () => alertPresent = false }
+          ]
+        );
+      }
       setBtnTitle("開始專注");
       setState("");
       console.log("stop");
