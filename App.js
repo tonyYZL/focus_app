@@ -5,8 +5,11 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Alert,
 } from "react-native";
+import Style from "./style";
 import LottieView from "lottie-react-native";
+import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 let timeId;
 
@@ -17,7 +20,7 @@ const App = () => {
   const [seconds, setSeconds] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [hours, setHours] = useState(0);
-  const [btnTitle, setBtnTitle] = useState("Start studying");
+  const [btnTitle, setBtnTitle] = useState("開始專注");
 
   //監測程式的狀態(有沒有被關掉)
   let a, b;
@@ -55,7 +58,13 @@ const App = () => {
       if (timeId) {
         clearInterval(timeId);
       }
-      setBtnTitle("Start studying");
+      Alert.alert(
+        "已自動停止計時",
+        "\n你剛才好像分心了哦，再堅持久一點，你可以的！！",
+        [{ text: "沒問題！" }]
+      );
+
+      setBtnTitle("開始專注");
       setState("");
       console.log("stop");
     }
@@ -63,7 +72,7 @@ const App = () => {
 
   //計時器開始 or 結束
   function timerController() {
-    if (btnTitle === "Start studying") {
+    if (btnTitle === "開始專注") {
       setTime(0);
       setSeconds(0);
       // setMinutes(0);
@@ -72,14 +81,14 @@ const App = () => {
       timeId = setInterval(() => {
         setTime(parseInt((Date.now() - startTime) / 1000));
       }, 100);
-      setBtnTitle("Take a break");
+      setBtnTitle("休息一下");
     } else {
       if (timeId) {
         clearInterval(timeId);
       } else {
         console.log("error");
       }
-      setBtnTitle("Start studying");
+      setBtnTitle("開始專注");
     }
   }
 
@@ -111,10 +120,10 @@ const App = () => {
   //--------------------------------
 
   return (
-    <View style={styles.container}>
+    <View style={Style.container}>
       {/* 花的動畫 */}
       <LottieView
-        style={{ height: 400, marginBottom: 30, marginLeft: -6 }}
+        style={Style.flowerAnimation}
         source={require("./assets/70942-orange-plant.json")}
         ref={lottieRef}
         speed={1}
@@ -123,10 +132,10 @@ const App = () => {
       />
 
       {/* 記錄到的總秒數 方便觀察所以先留著*/}
-      <Text>{time}</Text>
+      {/* <Text>{time}</Text> */}
 
       {/* 轉換過格式的時間 */}
-      <Text style={styles.timerText}>
+      <Text style={Style.timeText}>
         {hours < 10 && hours > 0 ? "0" : ""}
         {hours ? hours + ":" : ""}
         {minutes < 10 ? "0" : ""}
@@ -139,7 +148,7 @@ const App = () => {
         activeOpacity={1}
         onPress={timerController}
         style={{
-          backgroundColor: btnTitle === "Start studying" ? "#FF9F00" : "#de7d00",
+          backgroundColor: btnTitle === "開始專注" ? "#FF9F00" : "#de7d00",
           width: 200,
           height: 60,
           alignItems: "center",
@@ -147,24 +156,10 @@ const App = () => {
           borderRadius: 5,
         }}
       >
-        <Text style={{ color: "#FFFFFF", fontSize: 20 }}>{btnTitle}</Text>
+        <Text style={Style.timerBtnTitle}>{btnTitle}</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  timerText: {
-    fontSize: 60,
-    fontWeight: "100",
-    letterSpacing: 5,
-  },
-});
 
 export default App;
