@@ -3,6 +3,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import Style from "./style";
 import LottieView from "lottie-react-native";
@@ -16,17 +17,9 @@ const HomePage = (props) => {
   //將 time 轉換成畫面顯示的時、分、秒
   useEffect(() => {
     setSeconds(props.time % 60);
-    if (!(props.time % 60) && props.time != 0) {
-      setMinutes((minutes) => minutes + 1);
-    }
+    setMinutes(Math.floor((props.time%3600)/60));
+    setHours(Math.floor(props.time/3600));
   }, [props.time]);
-
-  useEffect(() => {
-    if (minutes === 60) {
-      setMinutes(0);
-      setHours((hours) => hours + 1);
-    }
-  }, [minutes]);
   //--------------------------------
 
   //花的動畫
@@ -86,6 +79,8 @@ const HomePage = (props) => {
       >
         <Text style={Style.timerBtnTitle}>{props.title}</Text>
       </TouchableOpacity>
+      <Text>{'\n'}</Text>
+      <Button onPress={() => Controller.totaltime()} title="get totaltime" color="#00FF00" />
     </View>
   );
 };
