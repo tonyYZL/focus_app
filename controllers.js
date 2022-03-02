@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 
-let timeId,times;
+let timeId, times;
 
 function timerController(title, setTime, setBtnTitle, setSeconds) {
   if (title === "開始專注") {
